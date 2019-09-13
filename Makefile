@@ -22,11 +22,11 @@ CXXFLAGS += -std=c++11
 ifeq ($(SYSTEM),Darwin)
 LDFLAGS += -L/usr/local/lib `pkg-config --libs protobuf grpc++`\
            -lgrpc++_reflection\
-           -ldl
+           -ldl -lssh
 else
 LDFLAGS += -L/usr/local/lib `pkg-config --libs protobuf grpc++`\
            -Wl,--no-as-needed -lgrpc++_reflection -Wl,--as-needed\
-           -ldl
+           -ldl -lssh
 endif
 PROTOC = protoc
 GRPC_CPP_PLUGIN = grpc_cpp_plugin
@@ -36,12 +36,9 @@ PROTOS_PATH = ./protos
 
 vpath %.proto $(PROTOS_PATH)
 
-all: system-check route_guide_client route_guide_server
+all: system-check server
 
-route_guide_client: route_guide.pb.o route_guide.grpc.pb.o route_guide_client.o helper.o
-	$(CXX) $^ $(LDFLAGS) -o $@
-
-route_guide_server: route_guide.pb.o route_guide.grpc.pb.o route_guide_server.o helper.o
+server: sftp.pb.o sftp.grpc.pb.o server.o
 	$(CXX) $^ $(LDFLAGS) -o $@
 
 %.grpc.pb.cc: %.proto
@@ -51,7 +48,7 @@ route_guide_server: route_guide.pb.o route_guide.grpc.pb.o route_guide_server.o 
 	$(PROTOC) -I $(PROTOS_PATH) --cpp_out=. $<
 
 clean:
-	rm -f *.o *.pb.cc *.pb.h route_guide_client route_guide_server
+	rm -f *.o *.pb.cc *.pb.h client server
 
 
 # The following is to test your system and ensure a smoother experience.
