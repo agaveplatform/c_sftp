@@ -1,6 +1,4 @@
-# gRPC Basics: C++ sample code
+### C_SFTP using grpc server on the back end.
 
-The files in this folder are the samples used in [gRPC Basics: C++][],
-a detailed tutorial for using gRPC in C++.
+This is a POC implementation of a grpc server that peforms an sftp put and get.
 
-[gRPC Basics: C++]:https://grpc.io/docs/tutorials/basic/c.html
