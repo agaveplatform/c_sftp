@@ -10,7 +10,7 @@
 #include <memory>
 #include <string>
 
-#include <grpcpp/grpcpp.h>
+#include <grpc++/grpc++.h>
 #include "sftp.grpc.pb.h"
 #include <sys/stat.h>
 
@@ -77,7 +77,7 @@ class SFTPServiceImpl final : public SFTP::Service {
 
         if (rc != SSH_OK)
         {
-            fprintf(stderr, "Error connecting to : %s\n",
+            fprintf(stderr, "Error connecting to host: %s\n",
                     ssh_get_error(my_ssh_session));
             exit(-1);
         }

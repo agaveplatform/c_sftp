@@ -17,13 +17,16 @@
 HOST_SYSTEM = $(shell uname | cut -f 1 -d_)
 SYSTEM ?= $(HOST_SYSTEM)
 CXX = g++
-CPPFLAGS += `pkg-config --cflags protobuf grpc`
 CXXFLAGS += -std=c++11
 ifeq ($(SYSTEM),Darwin)
+CPPFLAGS += `pkg-config --cflags protobuf grpc` -I/usr/local/homebrew/include
 LDFLAGS += -L/usr/local/lib `pkg-config --libs protobuf grpc++`\
            -lgrpc++_reflection\
-           -ldl -lssh
+           -ldl -lssh \
+           -L/usr/local/homebrew/lib
+
 else
+CPPFLAGS += `pkg-config --cflags protobuf grpc`
 LDFLAGS += -L/usr/local/lib `pkg-config --libs protobuf grpc++`\
            -Wl,--no-as-needed -lgrpc++_reflection -Wl,--as-needed\
            -ldl -lssh
@@ -39,6 +42,7 @@ vpath %.proto $(PROTOS_PATH)
 all: system-check server
 
 server: sftp.pb.o sftp.grpc.pb.o server.o
+	date
 	$(CXX) $^ $(LDFLAGS) -o $@
 
 %.grpc.pb.cc: %.proto

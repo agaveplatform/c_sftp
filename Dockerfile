@@ -1,8 +1,12 @@
 FROM grpc/cxx:latest
 
 RUN apt update && \
-    apt install ssh libssh-dev
+    apt install -y ssh libssh-dev
 
-COPY . .
+COPY . /app
+
+WORKDIR /app
 
 RUN make clean && make all
+
+CMD ["/app/server"]
