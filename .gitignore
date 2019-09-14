@@ -1,0 +1,4 @@
+*.o
+route_guide*.h
+server
+route_guide_client
