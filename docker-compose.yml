@@ -1,0 +1,23 @@
+version: '3.7'
+
+networks:
+  demo:
+
+services:
+  c_sftp:
+    build:
+      context: .
+    image: c_sftp:latest
+    restart: always
+    ports:
+      - "50051:50051"
+    networks:
+      - demo
+
+  centos:
+    image: agaveapi/centos-base:latest
+    restart: on-failure
+    ports:
+      - "10022:22"
+    networks:
+      - demo
